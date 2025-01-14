@@ -46,8 +46,17 @@ const AuthenticatedSettingsIndexLazyImport = createFileRoute(
 const AuthenticatedHelpCenterIndexLazyImport = createFileRoute(
   '/_authenticated/help-center/',
 )()
+const AuthenticatedFilesIndexLazyImport = createFileRoute(
+  '/_authenticated/files/',
+)()
 const AuthenticatedChatsIndexLazyImport = createFileRoute(
   '/_authenticated/chats/',
+)()
+const AuthenticatedCallsIndexLazyImport = createFileRoute(
+  '/_authenticated/calls/',
+)()
+const AuthenticatedAssistantsIndexLazyImport = createFileRoute(
+  '/_authenticated/assistants/',
 )()
 const AuthenticatedAppsIndexLazyImport = createFileRoute(
   '/_authenticated/apps/',
@@ -63,6 +72,9 @@ const AuthenticatedSettingsAppearanceLazyImport = createFileRoute(
 )()
 const AuthenticatedSettingsAccountLazyImport = createFileRoute(
   '/_authenticated/settings/account',
+)()
+const AuthenticatedCallsCallIdLazyImport = createFileRoute(
+  '/_authenticated/calls/$callId',
 )()
 
 // Create/Update Routes
@@ -209,6 +221,15 @@ const AuthenticatedHelpCenterIndexLazyRoute =
     ),
   )
 
+const AuthenticatedFilesIndexLazyRoute =
+  AuthenticatedFilesIndexLazyImport.update({
+    id: '/files/',
+    path: '/files/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/files/index.lazy').then((d) => d.Route),
+  )
+
 const AuthenticatedChatsIndexLazyRoute =
   AuthenticatedChatsIndexLazyImport.update({
     id: '/chats/',
@@ -216,6 +237,26 @@ const AuthenticatedChatsIndexLazyRoute =
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any).lazy(() =>
     import('./routes/_authenticated/chats/index.lazy').then((d) => d.Route),
+  )
+
+const AuthenticatedCallsIndexLazyRoute =
+  AuthenticatedCallsIndexLazyImport.update({
+    id: '/calls/',
+    path: '/calls/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/calls/index.lazy').then((d) => d.Route),
+  )
+
+const AuthenticatedAssistantsIndexLazyRoute =
+  AuthenticatedAssistantsIndexLazyImport.update({
+    id: '/assistants/',
+    path: '/assistants/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/assistants/index.lazy').then(
+      (d) => d.Route,
+    ),
   )
 
 const AuthenticatedAppsIndexLazyRoute = AuthenticatedAppsIndexLazyImport.update(
@@ -270,6 +311,15 @@ const AuthenticatedSettingsAccountLazyRoute =
     import('./routes/_authenticated/settings/account.lazy').then(
       (d) => d.Route,
     ),
+  )
+
+const AuthenticatedCallsCallIdLazyRoute =
+  AuthenticatedCallsCallIdLazyImport.update({
+    id: '/calls/$callId',
+    path: '/calls/$callId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/calls/$callId.lazy').then((d) => d.Route),
   )
 
 // Populate the FileRoutesByPath interface
@@ -374,6 +424,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexImport
       parentRoute: typeof AuthenticatedRouteImport
     }
+    '/_authenticated/calls/$callId': {
+      id: '/_authenticated/calls/$callId'
+      path: '/calls/$callId'
+      fullPath: '/calls/$callId'
+      preLoaderRoute: typeof AuthenticatedCallsCallIdLazyImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
     '/_authenticated/settings/account': {
       id: '/_authenticated/settings/account'
       path: '/account'
@@ -409,11 +466,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsIndexLazyImport
       parentRoute: typeof AuthenticatedRouteImport
     }
+    '/_authenticated/assistants/': {
+      id: '/_authenticated/assistants/'
+      path: '/assistants'
+      fullPath: '/assistants'
+      preLoaderRoute: typeof AuthenticatedAssistantsIndexLazyImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
+    '/_authenticated/calls/': {
+      id: '/_authenticated/calls/'
+      path: '/calls'
+      fullPath: '/calls'
+      preLoaderRoute: typeof AuthenticatedCallsIndexLazyImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
     '/_authenticated/chats/': {
       id: '/_authenticated/chats/'
       path: '/chats'
       fullPath: '/chats'
       preLoaderRoute: typeof AuthenticatedChatsIndexLazyImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
+    '/_authenticated/files/': {
+      id: '/_authenticated/files/'
+      path: '/files'
+      fullPath: '/files'
+      preLoaderRoute: typeof AuthenticatedFilesIndexLazyImport
       parentRoute: typeof AuthenticatedRouteImport
     }
     '/_authenticated/help-center/': {
@@ -478,8 +556,12 @@ const AuthenticatedSettingsRouteLazyRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRouteLazyRoute: typeof AuthenticatedSettingsRouteLazyRouteWithChildren
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedCallsCallIdLazyRoute: typeof AuthenticatedCallsCallIdLazyRoute
   AuthenticatedAppsIndexLazyRoute: typeof AuthenticatedAppsIndexLazyRoute
+  AuthenticatedAssistantsIndexLazyRoute: typeof AuthenticatedAssistantsIndexLazyRoute
+  AuthenticatedCallsIndexLazyRoute: typeof AuthenticatedCallsIndexLazyRoute
   AuthenticatedChatsIndexLazyRoute: typeof AuthenticatedChatsIndexLazyRoute
+  AuthenticatedFilesIndexLazyRoute: typeof AuthenticatedFilesIndexLazyRoute
   AuthenticatedHelpCenterIndexLazyRoute: typeof AuthenticatedHelpCenterIndexLazyRoute
   AuthenticatedTasksIndexLazyRoute: typeof AuthenticatedTasksIndexLazyRoute
   AuthenticatedUsersIndexLazyRoute: typeof AuthenticatedUsersIndexLazyRoute
@@ -489,8 +571,12 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRouteLazyRoute:
     AuthenticatedSettingsRouteLazyRouteWithChildren,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedCallsCallIdLazyRoute: AuthenticatedCallsCallIdLazyRoute,
   AuthenticatedAppsIndexLazyRoute: AuthenticatedAppsIndexLazyRoute,
+  AuthenticatedAssistantsIndexLazyRoute: AuthenticatedAssistantsIndexLazyRoute,
+  AuthenticatedCallsIndexLazyRoute: AuthenticatedCallsIndexLazyRoute,
   AuthenticatedChatsIndexLazyRoute: AuthenticatedChatsIndexLazyRoute,
+  AuthenticatedFilesIndexLazyRoute: AuthenticatedFilesIndexLazyRoute,
   AuthenticatedHelpCenterIndexLazyRoute: AuthenticatedHelpCenterIndexLazyRoute,
   AuthenticatedTasksIndexLazyRoute: AuthenticatedTasksIndexLazyRoute,
   AuthenticatedUsersIndexLazyRoute: AuthenticatedUsersIndexLazyRoute,
@@ -513,12 +599,16 @@ export interface FileRoutesByFullPath {
   '/404': typeof errors404LazyRoute
   '/503': typeof errors503LazyRoute
   '/': typeof AuthenticatedIndexRoute
+  '/calls/$callId': typeof AuthenticatedCallsCallIdLazyRoute
   '/settings/account': typeof AuthenticatedSettingsAccountLazyRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceLazyRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayLazyRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsLazyRoute
   '/apps': typeof AuthenticatedAppsIndexLazyRoute
+  '/assistants': typeof AuthenticatedAssistantsIndexLazyRoute
+  '/calls': typeof AuthenticatedCallsIndexLazyRoute
   '/chats': typeof AuthenticatedChatsIndexLazyRoute
+  '/files': typeof AuthenticatedFilesIndexLazyRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexLazyRoute
   '/settings/': typeof AuthenticatedSettingsIndexLazyRoute
   '/tasks': typeof AuthenticatedTasksIndexLazyRoute
@@ -537,12 +627,16 @@ export interface FileRoutesByTo {
   '/404': typeof errors404LazyRoute
   '/503': typeof errors503LazyRoute
   '/': typeof AuthenticatedIndexRoute
+  '/calls/$callId': typeof AuthenticatedCallsCallIdLazyRoute
   '/settings/account': typeof AuthenticatedSettingsAccountLazyRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceLazyRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayLazyRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsLazyRoute
   '/apps': typeof AuthenticatedAppsIndexLazyRoute
+  '/assistants': typeof AuthenticatedAssistantsIndexLazyRoute
+  '/calls': typeof AuthenticatedCallsIndexLazyRoute
   '/chats': typeof AuthenticatedChatsIndexLazyRoute
+  '/files': typeof AuthenticatedFilesIndexLazyRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexLazyRoute
   '/settings': typeof AuthenticatedSettingsIndexLazyRoute
   '/tasks': typeof AuthenticatedTasksIndexLazyRoute
@@ -565,12 +659,16 @@ export interface FileRoutesById {
   '/(errors)/500': typeof errors500LazyRoute
   '/(errors)/503': typeof errors503LazyRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/calls/$callId': typeof AuthenticatedCallsCallIdLazyRoute
   '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountLazyRoute
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceLazyRoute
   '/_authenticated/settings/display': typeof AuthenticatedSettingsDisplayLazyRoute
   '/_authenticated/settings/notifications': typeof AuthenticatedSettingsNotificationsLazyRoute
   '/_authenticated/apps/': typeof AuthenticatedAppsIndexLazyRoute
+  '/_authenticated/assistants/': typeof AuthenticatedAssistantsIndexLazyRoute
+  '/_authenticated/calls/': typeof AuthenticatedCallsIndexLazyRoute
   '/_authenticated/chats/': typeof AuthenticatedChatsIndexLazyRoute
+  '/_authenticated/files/': typeof AuthenticatedFilesIndexLazyRoute
   '/_authenticated/help-center/': typeof AuthenticatedHelpCenterIndexLazyRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexLazyRoute
   '/_authenticated/tasks/': typeof AuthenticatedTasksIndexLazyRoute
@@ -593,12 +691,16 @@ export interface FileRouteTypes {
     | '/404'
     | '/503'
     | '/'
+    | '/calls/$callId'
     | '/settings/account'
     | '/settings/appearance'
     | '/settings/display'
     | '/settings/notifications'
     | '/apps'
+    | '/assistants'
+    | '/calls'
     | '/chats'
+    | '/files'
     | '/help-center'
     | '/settings/'
     | '/tasks'
@@ -616,12 +718,16 @@ export interface FileRouteTypes {
     | '/404'
     | '/503'
     | '/'
+    | '/calls/$callId'
     | '/settings/account'
     | '/settings/appearance'
     | '/settings/display'
     | '/settings/notifications'
     | '/apps'
+    | '/assistants'
+    | '/calls'
     | '/chats'
+    | '/files'
     | '/help-center'
     | '/settings'
     | '/tasks'
@@ -642,12 +748,16 @@ export interface FileRouteTypes {
     | '/(errors)/500'
     | '/(errors)/503'
     | '/_authenticated/'
+    | '/_authenticated/calls/$callId'
     | '/_authenticated/settings/account'
     | '/_authenticated/settings/appearance'
     | '/_authenticated/settings/display'
     | '/_authenticated/settings/notifications'
     | '/_authenticated/apps/'
+    | '/_authenticated/assistants/'
+    | '/_authenticated/calls/'
     | '/_authenticated/chats/'
+    | '/_authenticated/files/'
     | '/_authenticated/help-center/'
     | '/_authenticated/settings/'
     | '/_authenticated/tasks/'
@@ -714,8 +824,12 @@ export const routeTree = rootRoute
       "children": [
         "/_authenticated/settings",
         "/_authenticated/",
+        "/_authenticated/calls/$callId",
         "/_authenticated/apps/",
+        "/_authenticated/assistants/",
+        "/_authenticated/calls/",
         "/_authenticated/chats/",
+        "/_authenticated/files/",
         "/_authenticated/help-center/",
         "/_authenticated/tasks/",
         "/_authenticated/users/"
@@ -769,6 +883,10 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/index.tsx",
       "parent": "/_authenticated"
     },
+    "/_authenticated/calls/$callId": {
+      "filePath": "_authenticated/calls/$callId.lazy.tsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/settings/account": {
       "filePath": "_authenticated/settings/account.lazy.tsx",
       "parent": "/_authenticated/settings"
@@ -789,8 +907,20 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/apps/index.lazy.tsx",
       "parent": "/_authenticated"
     },
+    "/_authenticated/assistants/": {
+      "filePath": "_authenticated/assistants/index.lazy.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/calls/": {
+      "filePath": "_authenticated/calls/index.lazy.tsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/chats/": {
       "filePath": "_authenticated/chats/index.lazy.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/files/": {
+      "filePath": "_authenticated/files/index.lazy.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/help-center/": {
